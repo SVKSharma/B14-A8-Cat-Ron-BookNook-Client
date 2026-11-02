@@ -30,7 +30,7 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <section className="w-full border-y border-border/60 bg-muted/35 py-14 sm:py-16 lg:py-20" aria-label="How borrowing works">
+    <section className="w-full border-y border-border/60 py-14 sm:py-16 lg:py-20" aria-label="How borrowing works">
       <div className="keep-content-center">
         <SectionHeading
           eyebrow="A simple way to share"
