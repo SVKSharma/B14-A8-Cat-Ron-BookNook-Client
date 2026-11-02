@@ -160,6 +160,18 @@
   }
 }
 
+a[href]:not([aria-disabled="true"]),
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]) {
+  cursor: pointer;
+}
+
+a[aria-disabled="true"],
+button:disabled,
+[aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
 @layer components {
   .keep-content-center {
     width: 100%;

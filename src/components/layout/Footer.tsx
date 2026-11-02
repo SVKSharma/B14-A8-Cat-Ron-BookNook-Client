@@ -30,8 +30,6 @@ function SocialLink({
 }
 
 export function Footer() {
-  const year = new Date().getFullYear();
-
   return (
     <footer className="mt-auto border-t border-border/80 bg-card/75" aria-label="Site footer">
       <div className="keep-content-center">
@@ -72,8 +70,8 @@ export function Footer() {
             <ul className="mt-4 space-y-3 text-sm">
               <li><Link href="/" className="text-muted-foreground transition hover:text-primary">Home</Link></li>
               <li><Link href="/books" className="text-muted-foreground transition hover:text-primary">All Books</Link></li>
-              <li><Link href="/login" className="text-muted-foreground transition hover:text-primary">Login</Link></li>
-              <li><Link href="/register" className="text-muted-foreground transition hover:text-primary">Create an account</Link></li>
+              <li><Link href="/signin" className="text-muted-foreground transition hover:text-primary">Sign in</Link></li>
+              <li><Link href="/signup" className="text-muted-foreground transition hover:text-primary">Sign up</Link></li>
             </ul>
           </nav>
 
@@ -94,7 +92,7 @@ export function Footer() {
         </div>
 
         <div className="flex flex-col gap-2 border-t border-border/70 py-5 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <p>© {year} {SITE_CONFIG.name}. Made for readers and the stories they share.</p>
+          <p>© 2026 {SITE_CONFIG.name}. Made for readers and the stories they share.</p>
           <Link href="/books" className="inline-flex items-center gap-1 font-medium transition hover:text-primary">
             Find your next read <ArrowUpRight className="size-3.5" aria-hidden="true" />
           </Link>
