@@ -1,6 +1,7 @@
 import { HeroCarousel } from "@/components/home/HeroCarousel";
 import { HowItWorks } from "@/components/home/HowItWorks";
 import { NewArrivals } from "@/components/home/NewArrivals";
+import { ReaderReviews } from "@/components/home/ReaderReviews";
 
 export default function Home() {
   return (
@@ -8,6 +9,7 @@ export default function Home() {
       <HeroCarousel />
       <NewArrivals />
       <HowItWorks />
+      <ReaderReviews />
     </>
   );
 }
