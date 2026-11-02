@@ -15,12 +15,21 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { NAV_LINKS } from "@/lib/constants";
+import { PRIVATE_NAV_LINKS, NAV_LINKS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import type { AuthUser } from "@/lib/auth-client";
+import { useSignOut } from "@/hooks/use-sign-out";
 
-export function MobileNav() {
+type MobileNavProps = {
+  user: AuthUser | null;
+  isPending: boolean;
+};
+
+export function MobileNav({ user, isPending }: MobileNavProps) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const handleSignOut = useSignOut();
+  const links = user ? [...NAV_LINKS, ...PRIVATE_NAV_LINKS] : NAV_LINKS;
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -46,7 +55,7 @@ export function MobileNav() {
         </SheetHeader>
 
         <nav className="flex flex-col gap-1 p-4" aria-label="Mobile navigation">
-          {NAV_LINKS.map((link) => {
+          {links.map((link) => {
             const active =
               link.href === "/"
                 ? pathname === "/"
@@ -72,24 +81,45 @@ export function MobileNav() {
         </nav>
 
         <SheetFooter className="border-t">
-          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-            Your library starts here
-          </p>
-          <Button
-            nativeButton={false}
-            render={
-              <Link href="/register" onClick={() => setOpen(false)} />
-            }
-          >
-            Create an account
-          </Button>
-          <Button
-            variant="outline"
-            nativeButton={false}
-            render={<Link href="/login" onClick={() => setOpen(false)} />}
-          >
-            Login
-          </Button>
+          {isPending ? (
+            <div className="h-24 animate-pulse rounded-xl bg-muted" aria-label="Loading account" />
+          ) : user ? (
+            <>
+              <div className="mb-2 rounded-xl bg-muted/70 p-3">
+                <p className="text-xs text-muted-foreground">Signed in as</p>
+                <p className="mt-0.5 truncate text-sm font-semibold text-foreground">{user.name}</p>
+              </div>
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => {
+                  setOpen(false);
+                  void handleSignOut();
+                }}
+              >
+                Sign out
+              </Button>
+            </>
+          ) : (
+            <>
+              <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                Your library starts here
+              </p>
+              <Button
+                nativeButton={false}
+                render={<Link href="/signup" onClick={() => setOpen(false)} />}
+              >
+                Sign up
+              </Button>
+              <Button
+                variant="outline"
+                nativeButton={false}
+                render={<Link href="/signin" onClick={() => setOpen(false)} />}
+              >
+                Sign in
+              </Button>
+            </>
+          )}
         </SheetFooter>
       </SheetContent>
     </Sheet>

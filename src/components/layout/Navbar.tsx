@@ -4,15 +4,20 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
-import { NAV_LINKS } from "@/lib/constants";
+import { useSession } from "@/lib/auth-client";
+import { PRIVATE_NAV_LINKS, NAV_LINKS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
+import { UserMenu } from "@/components/auth/UserMenu";
 import { MobileNav } from "./MobileNav";
 import { SiteLogo } from "./SiteLogo";
 import { ThemeToggle } from "./ThemeToggle";
 
 export function Navbar() {
   const pathname = usePathname();
+  const { data: session, isPending } = useSession();
+  const user = session?.user ?? null;
+  const links = user ? [...NAV_LINKS, ...PRIVATE_NAV_LINKS] : NAV_LINKS;
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/80 bg-background/95 shadow-[0_4px_24px_-20px_rgba(30,45,35,0.35)] backdrop-blur-xl">
@@ -20,10 +25,10 @@ export function Navbar() {
         <SiteLogo />
 
         <nav
-          className="hidden items-center gap-1 rounded-full border border-border/70 bg-card/75 p-1 shadow-sm md:flex"
+          className="hidden items-center gap-1 rounded-full border border-border/70 bg-card/75 p-1 shadow-sm lg:flex"
           aria-label="Main navigation"
         >
-          {NAV_LINKS.map((link) => {
+          {links.map((link) => {
             const active =
               link.href === "/"
                 ? pathname === "/"
@@ -47,31 +52,39 @@ export function Navbar() {
           })}
         </nav>
 
-        <div className="hidden items-center gap-2 md:flex">
+        <div className="hidden items-center gap-2 lg:flex">
           <ThemeToggle />
           <span aria-hidden="true" className="mx-1 h-7 w-px bg-border" />
-          <Button
-            variant="outline"
-            size="lg"
-            className="border-input bg-card px-4 text-foreground shadow-sm hover:border-primary/40 hover:bg-muted"
-            nativeButton={false}
-            render={<Link href="/login" />}
-          >
-            Login
-          </Button>
-          <Button
-            size="lg"
-            className="px-4"
-            nativeButton={false}
-            render={<Link href="/register" />}
-          >
-            Register
-          </Button>
+          {isPending ? (
+            <div className="h-10 w-36 animate-pulse rounded-full bg-muted" aria-label="Loading account" />
+          ) : user ? (
+            <UserMenu user={user} />
+          ) : (
+            <>
+              <Button
+                variant="outline"
+                size="lg"
+                className="border-input bg-card px-4 text-foreground shadow-sm hover:border-primary/40 hover:bg-muted"
+                nativeButton={false}
+                render={<Link href="/signin" />}
+              >
+                Sign in
+              </Button>
+              <Button
+                size="lg"
+                className="px-4"
+                nativeButton={false}
+                render={<Link href="/signup" />}
+              >
+                Sign up
+              </Button>
+            </>
+          )}
         </div>
 
-        <div className="flex items-center gap-1 md:hidden">
+        <div className="flex items-center gap-1 lg:hidden">
           <ThemeToggle />
-          <MobileNav />
+          <MobileNav user={user} isPending={isPending} />
         </div>
       </div>
     </header>
