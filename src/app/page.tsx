@@ -1,5 +1,5 @@
+import { HeroCarousel } from "@/components/home/HeroCarousel";
+
 export default function Home() {
-  return (
-      <>Hello, BookNook!</>
-  );
+  return <HeroCarousel />;
 }
