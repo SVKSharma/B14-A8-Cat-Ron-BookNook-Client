@@ -154,4 +154,22 @@
   .keep-content-center {
     @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
   }
+
+  .home-hero-stage {
+    @apply relative isolate;
+  }
+
+  .home-hero-stage::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset-block: 0;
+    left: 50%;
+    width: 100vw;
+    transform: translateX(-50%);
+    background:
+      radial-gradient(ellipse at 14% 18%, color-mix(in srgb, var(--accent) 44%, transparent), transparent 38%),
+      radial-gradient(ellipse at 86% 30%, color-mix(in srgb, var(--primary) 8%, transparent), transparent 42%),
+      linear-gradient(180deg, color-mix(in srgb, var(--primary) 4%, var(--background)), var(--background) 78%);
+  }
 }
