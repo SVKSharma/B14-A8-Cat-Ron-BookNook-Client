@@ -81,6 +81,8 @@
   --sidebar-accent-foreground: #26312a;
   --sidebar-border: #d9d1c3;
   --sidebar-ring: #285d45;
+  --page-glow-primary: rgb(30 77 58 / 0.075);
+  --page-glow-accent: rgb(201 138 60 / 0.11);
 }
 
 .dark {
@@ -115,6 +117,8 @@
   --sidebar-accent-foreground: #f4f1ea;
   --sidebar-border: #2a352e;
   --sidebar-ring: #8fd6b2;
+  --page-glow-primary: rgb(143 214 178 / 0.055);
+  --page-glow-accent: rgb(224 167 95 / 0.035);
 }
 
 @layer base {
@@ -128,6 +132,12 @@
 
   body {
     @apply bg-background text-foreground;
+    background-image:
+      radial-gradient(ellipse 62rem 42rem at 0% 0%, var(--page-glow-primary), transparent 72%),
+      radial-gradient(ellipse 54rem 38rem at 100% 18%, var(--page-glow-accent), transparent 74%),
+      linear-gradient(145deg, var(--background), color-mix(in srgb, var(--background) 94%, var(--primary)) 54%, var(--background));
+    background-attachment: fixed;
+    background-color: var(--background);
   }
 
   h1,
@@ -152,7 +162,22 @@
 
 @layer components {
   .keep-content-center {
-    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+    width: 100%;
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .keep-content-center {
+      padding-inline: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .keep-content-center {
+      padding-inline: 2rem;
+    }
   }
 
   .home-hero-stage {

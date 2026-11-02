@@ -3,6 +3,7 @@ import { Fraunces, Geist, Geist_Mono } from "next/font/google";
 
 import "./globals.css";
 
+import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { Toaster } from "@/components/ui/toast";
@@ -68,6 +69,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <div className="flex min-h-svh flex-col">
               <Navbar />
               <main className="flex-1">{children}</main>
+              <Footer />
             </div>
           </Toaster>
         </ThemeProvider>
