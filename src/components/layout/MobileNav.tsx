@@ -27,9 +27,9 @@ export function MobileNav() {
       <SheetTrigger
         render={
           <Button
-            variant="ghost"
+            variant="outline"
             size="icon"
-            className="md:hidden"
+            className="border-input bg-card text-foreground shadow-sm hover:border-primary/40 hover:bg-muted md:hidden"
             aria-label="Open navigation menu"
           />
         }

@@ -21,7 +21,7 @@ export function SiteLogo({ className }: SiteLogoProps) {
       <span className="flex size-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm transition-transform group-hover:-rotate-3">
         <BookOpenIcon className="size-5" aria-hidden="true" />
       </span>
-      <span className="font-heading text-xl font-semibold tracking-tight">
+      <span className="font-heading text-xl font-semibold tracking-tight text-foreground">
         {SITE_CONFIG.name}
       </span>
     </Link>

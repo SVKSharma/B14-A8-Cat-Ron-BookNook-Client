@@ -11,8 +11,9 @@ export function ThemeToggle() {
   return (
     <Button
       type="button"
-      variant="ghost"
+      variant="outline"
       size="icon"
+      className="border-input bg-card text-foreground shadow-sm hover:border-primary/40 hover:bg-muted"
       aria-label="Toggle color theme"
       title="Toggle color theme"
       onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
