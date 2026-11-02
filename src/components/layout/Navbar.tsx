@@ -16,7 +16,7 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/80 bg-background/95 shadow-[0_4px_24px_-20px_rgba(30,45,35,0.35)] backdrop-blur-xl">
-      <div className="keep-content-center flex h-[4.5rem] items-center justify-between gap-4">
+      <div className="keep-content-center flex h-18 items-center justify-between gap-4">
         <SiteLogo />
 
         <nav
