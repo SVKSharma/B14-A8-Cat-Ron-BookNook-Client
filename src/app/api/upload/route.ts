@@ -1,11 +1,10 @@
 import { NextResponse } from "next/server";
-import { headers } from "next/headers";
 
-import { auth } from "@/lib/auth";
+import { getServerSession } from "@/lib/auth-token-server";
 import { ImageUploadError, uploadImageToImgbb } from "@/lib/imgbb";
 
 export async function POST(request: Request) {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getServerSession();
   if (!session) {
     return NextResponse.json({ message: "Sign in to upload a book cover." }, { status: 401 });
   }

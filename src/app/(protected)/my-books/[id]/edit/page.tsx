@@ -1,15 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import { ArrowLeft, PencilLine } from "lucide-react";
 
 import { EditBookForm } from "@/components/books/EditBookForm";
 import { Button } from "@/components/ui/button";
 import { getBook, ApiError } from "@/lib/api";
-import { auth } from "@/lib/auth";
-import { getServerAccessToken } from "@/lib/auth-token-server";
+import { getServerAccessToken, getServerSession } from "@/lib/auth-token-server";
 import { isBook } from "@/lib/book-utils";
 
 export const metadata: Metadata = {
@@ -45,7 +43,7 @@ function EditBookError() {
 }
 
 async function EditBookContent({ params }: EditBookPageProps) {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getServerSession();
   if (!session) redirect("/signin?callbackUrl=%2Fmy-books");
 
   const { id } = await params;

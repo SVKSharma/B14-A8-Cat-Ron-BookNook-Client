@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { BookPlus } from "lucide-react";
 
 import { AddBookForm } from "@/components/books/AddBookForm";
-import { auth } from "@/lib/auth";
+import { getServerSession } from "@/lib/auth-token-server";
 
 export const metadata: Metadata = {
   title: "Add a Book",
@@ -12,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 export default async function AddBookPage() {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getServerSession();
   if (!session) redirect("/signin?callbackUrl=%2Fadd-book");
 
   return (

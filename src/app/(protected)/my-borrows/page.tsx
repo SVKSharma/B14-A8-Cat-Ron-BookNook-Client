@@ -2,15 +2,13 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { ArrowRight, BookOpen, CalendarDays, LibraryBig } from "lucide-react";
 
 import { ReturnBorrowButton } from "@/components/books/ReturnBorrowButton";
 import { Button } from "@/components/ui/button";
 import { getBorrows } from "@/lib/api";
-import { auth } from "@/lib/auth";
-import { getServerAccessToken } from "@/lib/auth-token-server";
+import { getServerAccessToken, getServerSession } from "@/lib/auth-token-server";
 import type { Borrow } from "@/lib/types";
 
 export const metadata: Metadata = {
@@ -65,7 +63,7 @@ function MyBorrowsEmpty() {
 }
 
 async function MyBorrowsResults() {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getServerSession();
   if (!session) redirect("/signin?callbackUrl=%2Fmy-borrows");
 
   let borrows: Borrow[];

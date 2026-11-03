@@ -3,9 +3,19 @@ import { MongoClient } from "mongodb";
 import { mongodbAdapter } from "@better-auth/mongo-adapter";
 import { jwt } from "better-auth/plugins";
 
-const client = new MongoClient(
-  process.env.MONGODB_CONNECTION_STRING_URI as string,
-);
+const mongoUri = process.env.MONGODB_CONNECTION_STRING_URI;
+if (!mongoUri) throw new Error("MONGODB_CONNECTION_STRING_URI must be configured.");
+
+const globalForMongo = globalThis as typeof globalThis & {
+  bookNookAuthMongoClient?: MongoClient;
+};
+const client = globalForMongo.bookNookAuthMongoClient ?? new MongoClient(mongoUri, {
+  maxPoolSize: 5,
+  maxConnecting: 2,
+  maxIdleTimeMS: 30_000,
+  serverSelectionTimeoutMS: 10_000,
+});
+globalForMongo.bookNookAuthMongoClient = client;
 const db = client.db("booknook");
 const authBaseUrl = process.env.BETTER_AUTH_URL?.trim().replace(/\/$/, "");
 const trustedOrigins = Array.from(new Set([
