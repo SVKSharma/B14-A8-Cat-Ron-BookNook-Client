@@ -51,8 +51,8 @@ export function MobileNav({ user, isPending }: MobileNavProps) {
         <MenuIcon aria-hidden="true" className="size-5" />
       </SheetTrigger>
 
-      <SheetContent side="right" className="w-[min(88vw,23rem)] gap-0 border-l-border/70 bg-background/95 p-0 backdrop-blur-2xl">
-        <SheetHeader className="border-b border-border/70 bg-gradient-to-br from-primary/[0.09] via-background to-background px-6 pb-5 pt-12">
+      <SheetContent side="right" className="h-dvh max-h-dvh w-[min(88vw,23rem)] gap-0 overflow-hidden border-l-border/70 bg-background/95 p-0 backdrop-blur-2xl">
+        <SheetHeader className="shrink-0 border-b border-border/70 bg-gradient-to-br from-primary/[0.09] via-background to-background px-6 pb-5 pt-12">
           <div className="mb-3 flex size-10 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-lg shadow-primary/20">
             <BookOpen className="size-5" aria-hidden="true" />
           </div>
@@ -62,7 +62,7 @@ export function MobileNav({ user, isPending }: MobileNavProps) {
           </SheetDescription>
         </SheetHeader>
 
-        <nav className="flex flex-col gap-1.5 p-4" aria-label="Mobile navigation">
+        <nav className="flex min-h-0 flex-1 flex-col gap-1.5 overflow-y-auto p-4" aria-label="Mobile navigation">
           <p className="px-3 pb-1 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/75">Explore</p>
           {links.map((link) => {
             const active = link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
@@ -87,7 +87,7 @@ export function MobileNav({ user, isPending }: MobileNavProps) {
           })}
         </nav>
 
-        <SheetFooter className="mt-auto border-t border-border/70 bg-muted/20 p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
+        <SheetFooter className="mt-auto shrink-0 border-t border-border/70 bg-muted/20 p-4 pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
           {isPending ? (
             <div className="h-[4.5rem] animate-pulse rounded-2xl bg-muted" aria-label="Loading account" />
           ) : user ? (
