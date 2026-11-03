@@ -2,13 +2,14 @@ import "server-only";
 
 import { cookies, headers } from "next/headers";
 
-import { auth } from "@/lib/auth";
+import { auth, connectAuthDatabase } from "@/lib/auth";
 
 export async function getServerSession(
   requestHeaders?: Awaited<ReturnType<typeof headers>>,
 ) {
   const resolvedHeaders = requestHeaders ?? await headers();
   try {
+    await connectAuthDatabase();
     return await auth.api.getSession({ headers: resolvedHeaders });
   } catch (error) {
     console.error("[auth] Failed to load server session", error instanceof Error
@@ -36,6 +37,7 @@ export async function getServerAccessToken(expectedEmail: string) {
   const storedToken = (await cookies()).get("booknook_api_token")?.value;
   if (storedToken && tokenMatchesEmail(storedToken, expectedEmail)) return storedToken;
 
+  await connectAuthDatabase();
   const result = await auth.api.getToken({ headers: await headers() });
   if (!result?.token) throw new Error("A signed-in session is required for this request.");
   return result.token;

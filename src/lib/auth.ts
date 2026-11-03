@@ -17,6 +17,11 @@ const client = globalForMongo.bookNookAuthMongoClient ?? new MongoClient(mongoUr
 });
 globalForMongo.bookNookAuthMongoClient = client;
 const db = client.db("booknook");
+
+export async function connectAuthDatabase() {
+  await client.connect();
+}
+
 const authBaseUrl = process.env.BETTER_AUTH_URL?.trim().replace(/\/$/, "");
 const trustedOrigins = Array.from(new Set([
   "http://localhost:3000",

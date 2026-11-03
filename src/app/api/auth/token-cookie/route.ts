@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 
-import { auth } from "@/lib/auth";
+import { auth, connectAuthDatabase } from "@/lib/auth";
 import { getServerSession } from "@/lib/auth-token-server";
 
 const ACCESS_TOKEN_COOKIE = "booknook_api_token";
@@ -25,6 +25,7 @@ export async function POST(request: Request) {
   }
 
   if (!token) {
+    await connectAuthDatabase();
     const result = await auth.api.getToken({ headers: requestHeaders });
     token = result?.token;
   }
