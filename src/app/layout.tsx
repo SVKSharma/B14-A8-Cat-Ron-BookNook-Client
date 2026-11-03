@@ -10,6 +10,11 @@ import { AccessTokenCookieSync } from "@/components/providers/AccessTokenCookieS
 import { Toaster } from "@/components/ui/toast";
 import { SITE_CONFIG } from "@/lib/constants";
 
+const siteUrl = process.env.BETTER_AUTH_URL;
+if (!siteUrl) {
+  throw new Error("BETTER_AUTH_URL must be configured to build site metadata.");
+}
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -29,7 +34,7 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE_CONFIG.url),
+  metadataBase: new URL(siteUrl),
   title: {
     default: `${SITE_CONFIG.name} | ${SITE_CONFIG.tagline}`,
     template: `%s | ${SITE_CONFIG.name}`,
@@ -45,7 +50,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: SITE_CONFIG.url,
+    url: siteUrl,
     siteName: SITE_CONFIG.name,
     title: `${SITE_CONFIG.name} | ${SITE_CONFIG.tagline}`,
     description: SITE_CONFIG.description,
