@@ -75,10 +75,10 @@ export function BookCard({ book, showEdit = false }: BookCardProps) {
         </div>
         {showEdit ? (
           <div className="grid grid-cols-2 gap-2">
-            <Button className="h-10 rounded-full shadow-sm" nativeButton={false} render={<Link href={detailsHref} />}>
+            <Button className="h-10 rounded-full px-2 text-xs shadow-sm sm:text-sm" nativeButton={false} render={<Link href={detailsHref} />}>
               Details <ArrowRight aria-hidden="true" />
             </Button>
-            <Button variant="outline" className="h-10 rounded-full" nativeButton={false} render={<Link href={`/my-books/${encodeURIComponent(book._id)}/edit`} />}>
+            <Button variant="outline" className="h-10 rounded-full px-2 text-xs sm:text-sm" nativeButton={false} render={<Link href={`/my-books/${encodeURIComponent(book._id)}/edit`} />}>
               <PencilLine aria-hidden="true" /> Edit
             </Button>
           </div>

@@ -113,7 +113,10 @@ export async function updateBook(
 export async function deleteBook(
   id: string
 ): Promise<{ acknowledged: boolean; deletedCount: number }> {
-  return apiFetch(`/books/${encodeURIComponent(id)}`, { method: "DELETE" });
+  return apiFetch(`/books/${encodeURIComponent(id)}`, {
+    method: "DELETE",
+    signal: AbortSignal.timeout(30_000),
+  });
 }
 
 export type CreateBorrowPayload = {

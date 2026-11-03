@@ -9,6 +9,7 @@ import { ArrowRight, CheckCircle2, ImagePlus, LoaderCircle, Save, TriangleAlert,
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
+import { DeleteBookButton } from "@/components/books/DeleteBookButton";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
@@ -265,6 +266,16 @@ export function EditBookForm({ book, user }: EditBookFormProps) {
           {isSaving ? isTakingLong ? "Still working… this can take a little while" : stage === "checking" ? "Checking for conflicts…" : stage === "uploading" ? "Uploading new cover…" : "Saving changes…" : "Save changes"}
           {!isSaving ? <ArrowRight aria-hidden="true" /> : null}
         </Button>
+
+        <section className="rounded-2xl border border-destructive/20 bg-destructive/[0.035] p-4 sm:p-5" aria-labelledby="delete-book-heading">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="min-w-0">
+              <h2 id="delete-book-heading" className="text-sm font-semibold text-foreground">Remove this listing</h2>
+              <p className="mt-1 text-sm leading-5 text-muted-foreground">Permanently remove this book from your shelf.</p>
+            </div>
+            <DeleteBookButton book={book} showLabel />
+          </div>
+        </section>
       </div>
 
       <aside className="h-fit rounded-3xl border border-border/75 bg-card/70 p-5 shadow-sm backdrop-blur-sm sm:p-6">
