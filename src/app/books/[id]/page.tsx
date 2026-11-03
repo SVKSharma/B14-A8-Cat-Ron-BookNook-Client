@@ -115,7 +115,7 @@ function BookDetails({ book }: { book: Book }) {
           </div>
 
           <div className="mt-6 max-w-md">
-            <BorrowBookButton book={book} />
+            <BorrowBookButton key={book._id} book={book} />
             <p className="mt-2 text-center text-xs leading-5 text-muted-foreground">
               Borrowed books are due back in 7 days. Find yours in My Borrows.
             </p>

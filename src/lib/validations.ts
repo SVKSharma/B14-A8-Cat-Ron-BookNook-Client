@@ -30,8 +30,8 @@ export const registerSchema = z
     image: z
       .string()
       .trim()
-      .url("Enter a valid photo URL")
-      .or(z.literal("")),
+      .min(1, "A profile photo is required")
+      .url("Enter a valid photo URL"),
     password: passwordSchema,
     confirmPassword: z.string().min(1, "Confirm your password"),
   })

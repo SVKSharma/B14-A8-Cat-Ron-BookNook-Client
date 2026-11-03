@@ -91,6 +91,17 @@ export async function getBook(id: string, accessToken?: string): Promise<Book> {
   return apiFetch<Book>(`/books/${encodeURIComponent(id)}${ownerQuery}`, { accessToken });
 }
 
+export async function getBookAvailability(
+  id: string,
+  signal?: AbortSignal,
+  accessToken?: string,
+): Promise<{ availableCopies: number; borrowableCopies?: number; ownsBook?: boolean }> {
+  return apiFetch<{ availableCopies: number; borrowableCopies?: number; ownsBook?: boolean }>(
+    `/books/${encodeURIComponent(id)}/availability`,
+    { signal, accessToken },
+  );
+}
+
 export type CreateBookPayload = Omit<Book, "_id" | "createdAt" | "addedByName" | "addedByEmail">;
 
 export async function createBook(

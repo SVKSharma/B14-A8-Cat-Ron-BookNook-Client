@@ -16,6 +16,7 @@ export type Book = {
 export type Borrow = {
   _id: string;
   bookId: string;
+  bookIsbn?: string;
   bookTitle: string;
   bookImage: string;
   userEmail: string;

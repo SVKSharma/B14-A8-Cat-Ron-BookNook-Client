@@ -57,7 +57,7 @@ function BooksLoadError() {
       <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-muted-foreground">
         We couldn’t load the book list right now. Please try again in a little while.
       </p>
-      <Button variant="outline" className="mt-6 rounded-full" nativeButton={false} render={<a href="/books" />}>
+      <Button variant="outline" className="mt-6 rounded-full" nativeButton={false} render={<Link href="/books" />}>
         Try again <ArrowRight aria-hidden="true" />
       </Button>
     </div>

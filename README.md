@@ -47,7 +47,8 @@ The interface pairs a cozy editorial look with practical tools: live search, cat
 - **Community bookshelf:** A responsive three-column catalogue with live search by title, author, or description, plus category filtering and a clear-filters action.
 - **Detailed book pages:** Each book has a large cover, title, author, category, description, contributor information, and a clear borrow action.
 - **Secure authentication:** Email/password sign-up and sign-in plus Google OAuth, powered by Better Auth and the MongoDB adapter.
-- **Password safeguards:** Registration enforces at least six characters, one uppercase letter, and one lowercase letter through Zod and React Hook Form.
+- **Password safeguards:** Registration enforces at least six characters, one uppercase letter, and one lowercase letter through Zod and React Hook Form, with eye toggles to show or hide password fields on sign-in and sign-up.
+- **Flexible profile photo setup:** Registration requires a profile photo. Readers can paste an image URL or upload one directly from their device through ImgBB, with a live preview before creating the account.
 - **Protected routes with callback support:** Add Book, My Books, My Borrows, and Profile are guarded by a Next.js proxy and server-side session checks. Signed-out readers are sent to sign in and returned to their original page afterward.
 - **JWT-backed API access:** Better Auth issues a seven-day JWT that the client sends as a Bearer token to the Express API. The token is also synced to a secure HttpOnly cookie for server-rendered requests.
 - **Add a book with image upload:** Signed-in readers can add a title, author, ISBN-13, category, description, and cover image. Covers are uploaded through a protected Next.js route to ImgBB.
@@ -67,7 +68,7 @@ The interface pairs a cozy editorial look with practical tools: live search, cat
 
 BookNook uses **Better Auth** with the **MongoDB adapter** for account storage and sessions.
 
-1. Readers register with name, email, optional photo URL, and password, or continue with Google.
+1. Readers register with name, email, a required profile photo (pasted URL or uploaded image), and password, or continue with Google.
 2. Better Auth stores users and sessions in MongoDB.
 3. A Better Auth **JWT plugin** issues a seven-day token with the reader’s email and name.
 4. Client components request the token through `getBrowserAccessToken()` and send it to the API as `Authorization: Bearer <token>`.
@@ -89,7 +90,7 @@ The API never trusts a client-supplied email for identity. It derives the reader
 - **Data Fetching:** Next.js Server Components, native `fetch`, typed API helpers
 - **Theming:** `next-themes`
 - **Dates & utilities:** date-fns, class-variance-authority, `cn`
-- **Image handling:** Next Image, ImgBB uploads through a protected route
+- **Image handling:** Next Image, ImgBB uploads through protected book-cover routes and a validated sign-up profile photo route
 - **Linting:** ESLint, `eslint-config-next`
 - **Deployment:** Vercel
 
@@ -145,7 +146,9 @@ book-nook/
 │   │   │   ├── auth/
 │   │   │   │   ├── [...all]/route.ts
 │   │   │   │   └── token-cookie/route.ts
-│   │   │   └── upload/route.ts
+│   │   │   └── upload/
+│   │   │       ├── profile/route.ts
+│   │   │       └── route.ts
 │   │   ├── books/
 │   │   │   ├── [id]/page.tsx
 │   │   │   └── page.tsx
@@ -173,6 +176,7 @@ book-nook/
 │   │   ├── auth-token-client.ts
 │   │   ├── auth-token-server.ts
 │   │   ├── constants.ts
+│   │   ├── imgbb.ts
 │   │   ├── types.ts
 │   │   └── validations.ts
 │   └── proxy.ts
@@ -226,7 +230,7 @@ NEXT_PUBLIC_API_URL=http://localhost:5000
 | `BETTER_AUTH_URL` | Yes | Public origin of this app; also used for metadata, JWT issuer, and JWT audience |
 | `Google_OAuth_Client_ID` | Yes for Google sign-in | Google OAuth client ID |
 | `Google_OAuth_Client_Secret` | Yes for Google sign-in | Google OAuth client secret |
-| `IMGBB_API_KEY` | Yes for cover uploads | ImgBB API key used by `/api/upload` |
+| `IMGBB_API_KEY` | Yes for image uploads | ImgBB API key used by `/api/upload` and `/api/upload/profile` |
 | `NEXT_PUBLIC_API_URL` | Yes | Base URL of the BookNook Express API |
 
 ### 4. Configure Google OAuth
@@ -275,10 +279,12 @@ The matching server deployment instructions are in the [server README](https://g
 
 <h2 style="font-size: 1.5rem; font-weight: 800;"><font color="#315b45">✅ Project Notes</font></h2>
 
+- Email/password registration requires a profile photo, either as a URL or an uploaded image.
+- Google sign-up uses the profile photo supplied by the Google account.
 - A borrow is due **seven days** after it is created.
 - Readers cannot borrow the same book twice while it is still on their borrow list.
 - Readers cannot borrow a book they added themselves.
-- Book covers are limited to JPG, PNG, WEBP, or GIF files up to 10 MB.
+- Book covers and profile photo uploads are limited to JPG, PNG, WEBP, or GIF files up to 10 MB.
 - The client never uses browser `alert()` or `confirm()` for application feedback.
 - Authenticated pages survive a full page reload without bouncing signed-in readers back to sign-in.
 
