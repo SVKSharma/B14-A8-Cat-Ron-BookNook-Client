@@ -127,9 +127,9 @@ export type CreateBorrowPayload = {
   returnDate?: string;
 };
 
-export async function getBorrows(email?: string): Promise<Borrow[]> {
+export async function getBorrows(email?: string, signal?: AbortSignal): Promise<Borrow[]> {
   const query = email ? `?email=${encodeURIComponent(email)}` : "";
-  return apiFetch<Borrow[]>(`/borrows${query}`);
+  return apiFetch<Borrow[]>(`/borrows${query}`, { signal });
 }
 
 export async function createBorrow(
@@ -138,11 +138,15 @@ export async function createBorrow(
   return apiFetch("/borrows", {
     method: "POST",
     body: JSON.stringify(payload),
+    signal: AbortSignal.timeout(30_000),
   });
 }
 
 export async function deleteBorrow(
   id: string
 ): Promise<{ acknowledged: boolean; deletedCount: number }> {
-  return apiFetch(`/borrows/${encodeURIComponent(id)}`, { method: "DELETE" });
+  return apiFetch(`/borrows/${encodeURIComponent(id)}`, {
+    method: "DELETE",
+    signal: AbortSignal.timeout(30_000),
+  });
 }
