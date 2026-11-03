@@ -15,7 +15,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToastManager } from "@/components/ui/toast";
 import { BOOK_CATEGORIES } from "@/lib/constants";
 import { ApiError, createBook, getBooks } from "@/lib/api";
-import { normalizeIsbn } from "@/lib/isbn";
+import { formatIsbnForDisplay, normalizeIsbn } from "@/lib/isbn";
 import { bookSchema } from "@/lib/validations";
 
 type BookDetails = z.infer<typeof bookDetailsSchema>;
@@ -35,13 +35,6 @@ const addBookFields: Record<keyof BookDetails, AddBookField> = {
     rows: 5,
   },
 };
-
-function formatIsbnForDisplay(value: string) {
-  const digits = value.replace(/\D/g, "").slice(0, 13);
-  const groups = digits.slice(0, 9).match(/.{1,3}/g) ?? [];
-  const finalGroup = digits.slice(9);
-  return [...groups, finalGroup].filter(Boolean).join("-");
-}
 
 const MAX_IMAGE_SIZE = 10 * 1024 * 1024;
 const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];

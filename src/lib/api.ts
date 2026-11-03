@@ -97,7 +97,7 @@ export async function createBook(
 }
 
 export type UpdateBookPayload = Partial<
-  Pick<Book, "title" | "author" | "category" | "image" | "description">
+  Pick<Book, "title" | "author" | "category" | "isbn" | "image" | "description">
 >;
 
 export async function updateBook(

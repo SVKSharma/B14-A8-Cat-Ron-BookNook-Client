@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, UserRound } from "lucide-react";
+import { ArrowRight, PencilLine, UserRound } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import type { Book } from "@/lib/types";
 
 type BookCardProps = {
   book: Book;
+  showEdit?: boolean;
 };
 
 function initials(name: string) {
@@ -19,7 +20,7 @@ function initials(name: string) {
     .join("");
 }
 
-export function BookCard({ book }: BookCardProps) {
+export function BookCard({ book, showEdit = false }: BookCardProps) {
   const detailsHref = `/books/${encodeURIComponent(book._id)}`;
 
   return (
@@ -72,13 +73,24 @@ export function BookCard({ book }: BookCardProps) {
             </p>
           </div>
         </div>
-        <Button
-          className="h-10 w-full rounded-full shadow-sm"
-          nativeButton={false}
-          render={<Link href={detailsHref} />}
-        >
-          View details <ArrowRight aria-hidden="true" />
-        </Button>
+        {showEdit ? (
+          <div className="grid grid-cols-2 gap-2">
+            <Button className="h-10 rounded-full shadow-sm" nativeButton={false} render={<Link href={detailsHref} />}>
+              Details <ArrowRight aria-hidden="true" />
+            </Button>
+            <Button variant="outline" className="h-10 rounded-full" nativeButton={false} render={<Link href={`/my-books/${encodeURIComponent(book._id)}/edit`} />}>
+              <PencilLine aria-hidden="true" /> Edit
+            </Button>
+          </div>
+        ) : (
+          <Button
+            className="h-10 w-full rounded-full shadow-sm"
+            nativeButton={false}
+            render={<Link href={detailsHref} />}
+          >
+            View details <ArrowRight aria-hidden="true" />
+          </Button>
+        )}
       </div>
     </article>
   );
