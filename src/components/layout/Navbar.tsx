@@ -83,7 +83,7 @@ function NavbarContent() {
           )}
         </div>
 
-        <div className="flex items-center gap-1 lg:hidden">
+        <div className="flex items-center gap-3 lg:hidden">
           <ThemeToggle />
           <MobileNav user={user} isPending={isPending} />
         </div>

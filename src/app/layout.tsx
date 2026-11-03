@@ -39,6 +39,9 @@ export const metadata: Metadata = {
     default: `${SITE_CONFIG.name} | ${SITE_CONFIG.tagline}`,
     template: `%s | ${SITE_CONFIG.name}`,
   },
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+  },
   description: SITE_CONFIG.description,
   keywords: [
     "BookNook",
