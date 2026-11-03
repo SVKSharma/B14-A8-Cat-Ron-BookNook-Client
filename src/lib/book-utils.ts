@@ -18,7 +18,7 @@ export function isBook(value: unknown): value is Book {
     book.image.trim().length > 0 &&
     typeof book.description === "string" &&
     typeof book.addedByName === "string" &&
-    typeof book.addedByEmail === "string" &&
+    (book.addedByEmail === undefined || typeof book.addedByEmail === "string") &&
     typeof book.createdAt === "string"
   );
 }

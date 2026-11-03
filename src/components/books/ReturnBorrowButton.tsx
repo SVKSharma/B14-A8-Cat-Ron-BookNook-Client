@@ -18,6 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useToastManager } from "@/components/ui/toast";
 import { deleteBorrow } from "@/lib/api";
+import { getBrowserAccessToken } from "@/lib/auth-token-client";
 
 export function ReturnBorrowButton({ id, title }: { id: string; title: string }) {
   const router = useRouter();
@@ -30,7 +31,7 @@ export function ReturnBorrowButton({ id, title }: { id: string; title: string })
     if (isReturning) return;
     setIsReturning(true);
     try {
-      await deleteBorrow(id);
+      await deleteBorrow(id, await getBrowserAccessToken());
       setOpen(false);
       setReturned(true);
       toastManager.add({ type: "success", title: "Book returned", description: `“${title}” has been removed from My Borrows.` });

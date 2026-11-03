@@ -16,6 +16,7 @@ export class ApiError extends Error {
 
 type ApiFetchOptions = RequestInit & {
   next?: { revalidate?: number; tags?: string[] };
+  accessToken?: string;
 };
 
 export async function apiFetch<T>(
@@ -23,13 +24,16 @@ export async function apiFetch<T>(
   init: ApiFetchOptions = {}
 ): Promise<T> {
   const headers = new Headers(init.headers);
+  const { accessToken, ...requestInit } = init;
+
+  if (accessToken) headers.set("Authorization", `Bearer ${accessToken}`);
 
   if (init.body && !(init.body instanceof FormData) && !headers.has("Content-Type")) {
     headers.set("Content-Type", "application/json");
   }
 
   const response = await fetch(`${API_BASE_URL}${path}`, {
-    ...init,
+    ...requestInit,
     headers,
     cache: "no-store",
   });
@@ -60,6 +64,7 @@ export type BookListParams = {
   limit?: number;
   email?: string;
   signal?: AbortSignal;
+  accessToken?: string;
 };
 
 export async function getBooks(params: BookListParams = {}): Promise<Book[]> {
@@ -77,22 +82,26 @@ export async function getBooks(params: BookListParams = {}): Promise<Book[]> {
 
   return apiFetch<Book[]>(`/books${query ? `?${query}` : ""}`, {
     signal: params.signal,
+    accessToken: params.accessToken,
   });
 }
 
-export async function getBook(id: string): Promise<Book> {
-  return apiFetch<Book>(`/books/${encodeURIComponent(id)}`);
+export async function getBook(id: string, accessToken?: string): Promise<Book> {
+  const ownerQuery = accessToken ? "?owner=true" : "";
+  return apiFetch<Book>(`/books/${encodeURIComponent(id)}${ownerQuery}`, { accessToken });
 }
 
-export type CreateBookPayload = Omit<Book, "_id" | "createdAt">;
+export type CreateBookPayload = Omit<Book, "_id" | "createdAt" | "addedByName" | "addedByEmail">;
 
 export async function createBook(
-  payload: CreateBookPayload
+  payload: CreateBookPayload,
+  accessToken: string,
 ): Promise<{ acknowledged: boolean; insertedId: string }> {
   return apiFetch("/books", {
     method: "POST",
     body: JSON.stringify(payload),
     signal: AbortSignal.timeout(30_000),
+    accessToken,
   });
 }
 
@@ -102,51 +111,56 @@ export type UpdateBookPayload = Partial<
 
 export async function updateBook(
   id: string,
-  payload: UpdateBookPayload
+  payload: UpdateBookPayload,
+  accessToken: string,
 ): Promise<{ acknowledged: boolean; matchedCount: number; modifiedCount: number }> {
   return apiFetch(`/books/${encodeURIComponent(id)}`, {
     method: "PATCH",
     body: JSON.stringify(payload),
+    accessToken,
   });
 }
 
 export async function deleteBook(
-  id: string
+  id: string,
+  accessToken: string,
 ): Promise<{ acknowledged: boolean; deletedCount: number }> {
   return apiFetch(`/books/${encodeURIComponent(id)}`, {
     method: "DELETE",
     signal: AbortSignal.timeout(30_000),
+    accessToken,
   });
 }
 
 export type CreateBorrowPayload = {
   bookId: string;
-  userEmail: string;
-  bookTitle?: string;
-  bookImage?: string;
   returnDate?: string;
 };
 
-export async function getBorrows(email?: string, signal?: AbortSignal): Promise<Borrow[]> {
+export async function getBorrows(email: string | undefined, signal: AbortSignal | undefined, accessToken: string): Promise<Borrow[]> {
   const query = email ? `?email=${encodeURIComponent(email)}` : "";
-  return apiFetch<Borrow[]>(`/borrows${query}`, { signal });
+  return apiFetch<Borrow[]>(`/borrows${query}`, { signal, accessToken });
 }
 
 export async function createBorrow(
-  payload: CreateBorrowPayload
+  payload: CreateBorrowPayload,
+  accessToken: string,
 ): Promise<{ acknowledged: boolean; insertedId: string }> {
   return apiFetch("/borrows", {
     method: "POST",
     body: JSON.stringify(payload),
     signal: AbortSignal.timeout(30_000),
+    accessToken,
   });
 }
 
 export async function deleteBorrow(
-  id: string
+  id: string,
+  accessToken: string,
 ): Promise<{ acknowledged: boolean; deletedCount: number }> {
   return apiFetch(`/borrows/${encodeURIComponent(id)}`, {
     method: "DELETE",
     signal: AbortSignal.timeout(30_000),
+    accessToken,
   });
 }

@@ -9,6 +9,7 @@ import { EditBookForm } from "@/components/books/EditBookForm";
 import { Button } from "@/components/ui/button";
 import { getBook, ApiError } from "@/lib/api";
 import { auth } from "@/lib/auth";
+import { getServerAccessToken } from "@/lib/auth-token-server";
 import { isBook } from "@/lib/book-utils";
 
 export const metadata: Metadata = {
@@ -50,14 +51,14 @@ async function EditBookContent({ params }: EditBookPageProps) {
   const { id } = await params;
   let result: unknown;
   try {
-    result = await getBook(id);
+    result = await getBook(id, await getServerAccessToken(session.user.email));
   } catch (error) {
     if (error instanceof ApiError && error.status === 404) notFound();
     return <EditBookError />;
   }
 
   if (!isBook(result)) notFound();
-  if (result.addedByEmail.trim().toLowerCase() !== session.user.email.trim().toLowerCase()) notFound();
+  if (!result.addedByEmail || result.addedByEmail.trim().toLowerCase() !== session.user.email.trim().toLowerCase()) notFound();
 
   return (
       <section className="keep-content-center w-full py-10 sm:py-14 lg:py-16">

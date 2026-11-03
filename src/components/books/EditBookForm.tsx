@@ -15,6 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { useToastManager } from "@/components/ui/toast";
 import { ApiError, getBooks, updateBook } from "@/lib/api";
+import { getBrowserAccessToken } from "@/lib/auth-token-client";
 import { BOOK_CATEGORIES } from "@/lib/constants";
 import { normalizeIsbn } from "@/lib/isbn";
 import type { Book } from "@/lib/types";
@@ -115,7 +116,12 @@ export function EditBookForm({ book, user }: EditBookFormProps) {
     setStage(currentStage);
 
     try {
-      const existingBooks = await getBooks({ signal: AbortSignal.timeout(15_000) });
+      const checkSignal = AbortSignal.timeout(15_000);
+      const accessToken = await getBrowserAccessToken();
+      const [existingBooks, ownerBooks] = await Promise.all([
+        getBooks({ signal: checkSignal }),
+        getBooks({ email: user.email, signal: checkSignal, accessToken }),
+      ]);
       const normalizeText = (value: string) => value.normalize("NFKC").trim().replace(/\s+/g, " ").toLowerCase();
       const isbn = normalizeIsbn(values.isbn);
       const title = normalizeText(values.title);
@@ -129,10 +135,9 @@ export function EditBookForm({ book, user }: EditBookFormProps) {
         return;
       }
 
-      const owner = (candidate: Book) => normalizeText(candidate.addedByEmail) === normalizeText(user.email);
-      const duplicate = sameIsbnBooks.some(owner) || existingBooks.some((candidate) =>
+      const ownerBookIds = new Set(ownerBooks.filter((candidate) => candidate._id !== book._id).map((candidate) => candidate._id));
+      const duplicate = sameIsbnBooks.some((candidate) => ownerBookIds.has(candidate._id)) || ownerBooks.some((candidate) =>
         candidate._id !== book._id &&
-        owner(candidate) &&
         (!candidate.isbn || !isbn) &&
         normalizeText(candidate.title) === title &&
         normalizeText(candidate.author) === author
@@ -167,7 +172,7 @@ export function EditBookForm({ book, user }: EditBookFormProps) {
         isbn,
         category: category as (typeof BOOK_CATEGORIES)[number],
         image,
-      });
+      }, await getBrowserAccessToken());
       toastManager.add({ type: "success", title: "Book updated", description: `Changes to ${values.title} have been saved.` });
       router.push("/my-books");
       router.refresh();

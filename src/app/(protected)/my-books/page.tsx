@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { getBooks } from "@/lib/api";
 import { isBook } from "@/lib/book-utils";
 import { auth } from "@/lib/auth";
+import { getServerAccessToken } from "@/lib/auth-token-server";
 import type { Book } from "@/lib/types";
 
 export const metadata: Metadata = {
@@ -70,10 +71,10 @@ async function MyBooksResults() {
 
   let books: Book[];
   try {
-    const result: unknown = await getBooks({ email: session.user.email });
+    const result: unknown = await getBooks({ email: session.user.email, accessToken: await getServerAccessToken(session.user.email) });
     if (!Array.isArray(result)) throw new Error("Unexpected book list response");
     const email = session.user.email.trim().toLowerCase();
-    books = result.filter(isBook).filter((book) => book.addedByEmail.trim().toLowerCase() === email);
+    books = result.filter(isBook).filter((book) => book.addedByEmail?.trim().toLowerCase() === email);
   } catch {
     return <MyBooksError />;
   }

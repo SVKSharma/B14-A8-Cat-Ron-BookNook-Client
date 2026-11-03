@@ -6,6 +6,7 @@ import "./globals.css";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { AccessTokenCookieSync } from "@/components/providers/AccessTokenCookieSync";
 import { Toaster } from "@/components/ui/toast";
 import { SITE_CONFIG } from "@/lib/constants";
 
@@ -65,6 +66,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-svh font-sans text-foreground">
         <ThemeProvider>
+          <AccessTokenCookieSync />
           <Toaster>
             <div className="site-shell flex min-h-svh flex-col">
               <Navbar />

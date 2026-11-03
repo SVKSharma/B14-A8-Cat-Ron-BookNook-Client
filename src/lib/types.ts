@@ -9,7 +9,7 @@ export type Book = {
   image: string;
   description: string;
   addedByName: string;
-  addedByEmail: string;
+  addedByEmail?: string;
   createdAt: string;
 };
 

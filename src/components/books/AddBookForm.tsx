@@ -15,6 +15,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToastManager } from "@/components/ui/toast";
 import { BOOK_CATEGORIES } from "@/lib/constants";
 import { ApiError, createBook, getBooks } from "@/lib/api";
+import { getBrowserAccessToken } from "@/lib/auth-token-client";
 import { formatIsbnForDisplay, normalizeIsbn } from "@/lib/isbn";
 import { bookSchema } from "@/lib/validations";
 
@@ -110,7 +111,12 @@ export function AddBookForm({ user }: AddBookFormProps) {
     let currentStage: "checking" | "uploading" | "saving" = "checking";
     setSubmitStage(currentStage);
     try {
-      const existingBooks = await getBooks({ signal: AbortSignal.timeout(15_000) });
+      const checkSignal = AbortSignal.timeout(15_000);
+      const accessToken = await getBrowserAccessToken();
+      const [existingBooks, ownerBooks] = await Promise.all([
+        getBooks({ signal: checkSignal }),
+        getBooks({ email: user.email, signal: checkSignal, accessToken }),
+      ]);
       const normalize = (value: string) => value.normalize("NFKC").trim().replace(/\s+/g, " ").toLowerCase();
       const normalizedTitle = normalize(values.title);
       const normalizedAuthor = normalize(values.author);
@@ -129,10 +135,8 @@ export function AddBookForm({ user }: AddBookFormProps) {
         return;
       }
 
-      const sameOwner = (book: (typeof existingBooks)[number]) =>
-        normalize(book.addedByEmail) === normalize(user.email);
-      const duplicate = matchingIsbnBooks.some(sameOwner) || existingBooks.some((book) =>
-        sameOwner(book) &&
+      const ownerBookIds = new Set(ownerBooks.map((book) => book._id));
+      const duplicate = matchingIsbnBooks.some((book) => ownerBookIds.has(book._id)) || ownerBooks.some((book) =>
         (!normalizedIsbn || !book.isbn) &&
         normalize(book.title) === normalizedTitle &&
         normalize(book.author) === normalizedAuthor
@@ -169,9 +173,7 @@ export function AddBookForm({ user }: AddBookFormProps) {
         ...values,
         category: category as (typeof BOOK_CATEGORIES)[number],
         image: uploadResult.url,
-        addedByName: user.name,
-        addedByEmail: user.email,
-      });
+      }, await getBrowserAccessToken());
       toastManager.add({ type: "success", title: "Book added", description: `${values.title} is now on the BookNook shelf.` });
       router.push("/books");
       router.refresh();
