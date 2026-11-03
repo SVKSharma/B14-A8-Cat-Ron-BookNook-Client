@@ -92,7 +92,7 @@ async function MyBorrowsResults() {
             <p className="mt-1 text-sm text-muted-foreground">Borrowed {dateLabel(borrow.borrowDate)}</p>
             <p className="mt-3 inline-flex items-center gap-2 rounded-full border border-accent/70 bg-accent/35 px-3 py-1.5 text-sm font-medium text-accent-foreground"><CalendarDays className="size-4" aria-hidden="true" /> Due {dateLabel(borrow.returnDate)}</p>
           </div>
-          <div className="flex shrink-0 items-center sm:justify-end"><ReturnBorrowButton id={borrow._id} title={borrow.bookTitle} /></div>
+          <div className="flex shrink-0 items-center sm:justify-end"><ReturnBorrowButton id={borrow._id} bookId={borrow.bookId} bookIsbn={borrow.bookIsbn} title={borrow.bookTitle} /></div>
         </article>
       ))}
     </div>
