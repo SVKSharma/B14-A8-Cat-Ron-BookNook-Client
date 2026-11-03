@@ -7,7 +7,13 @@ const client = new MongoClient(
   process.env.MONGODB_CONNECTION_STRING_URI as string,
 );
 const db = client.db("booknook");
-const authBaseUrl = process.env.BETTER_AUTH_URL?.replace(/\/$/, "");
+const authBaseUrl = process.env.BETTER_AUTH_URL?.trim().replace(/\/$/, "");
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+const trustedOrigins = Array.from(new Set(
+  [authBaseUrl, siteUrl]
+    .filter((url): url is string => Boolean(url))
+    .map((url) => new URL(url).origin),
+));
 
 export const auth = betterAuth({
   database: mongodbAdapter(db, {
@@ -18,6 +24,7 @@ export const auth = betterAuth({
     autoSignIn: false,
   },
   baseURL: authBaseUrl,
+  trustedOrigins,
   socialProviders: {
     google: {
       clientId: process.env.Google_OAuth_Client_ID as string,
