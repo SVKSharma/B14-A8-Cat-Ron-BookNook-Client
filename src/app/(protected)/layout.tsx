@@ -1,9 +1,5 @@
 import type { ReactNode } from "react";
 import { Suspense } from "react";
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
-
-import { auth } from "@/lib/auth";
 
 function ProtectedLoading() {
   return (
@@ -17,16 +13,10 @@ function ProtectedLoading() {
   );
 }
 
-async function RequireSession({ children }: { children: ReactNode }) {
-  const session = await auth.api.getSession({ headers: await headers() });
-  if (!session) redirect("/signin");
-  return children;
-}
-
 export default function ProtectedLayout({ children }: { children: ReactNode }) {
   return (
     <Suspense fallback={<ProtectedLoading />}>
-      <RequireSession>{children}</RequireSession>
+      {children}
     </Suspense>
   );
 }

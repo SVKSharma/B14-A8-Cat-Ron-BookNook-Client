@@ -8,12 +8,10 @@ const client = new MongoClient(
 );
 const db = client.db("booknook");
 const authBaseUrl = process.env.BETTER_AUTH_URL?.trim().replace(/\/$/, "");
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
-const trustedOrigins = Array.from(new Set(
-  [authBaseUrl, siteUrl]
-    .filter((url): url is string => Boolean(url))
-    .map((url) => new URL(url).origin),
-));
+const trustedOrigins = Array.from(new Set([
+  "http://localhost:3000",
+  ...(authBaseUrl ? [new URL(authBaseUrl).origin] : []),
+]));
 
 export const auth = betterAuth({
   database: mongodbAdapter(db, {

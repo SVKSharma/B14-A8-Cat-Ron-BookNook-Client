@@ -3,7 +3,6 @@ export const SITE_CONFIG = {
   tagline: "A small online library",
   description:
     "A cozy online library where readers share books, borrow stories, and return them for the next reader.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
   email: "hello@booknook.app",
   phone: "+1 (555) 012-3456",
   social: {
