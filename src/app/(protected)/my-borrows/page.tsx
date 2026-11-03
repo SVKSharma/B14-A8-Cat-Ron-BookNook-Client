@@ -10,6 +10,7 @@ import { ReturnBorrowButton } from "@/components/books/ReturnBorrowButton";
 import { Button } from "@/components/ui/button";
 import { getBorrows } from "@/lib/api";
 import { auth } from "@/lib/auth";
+import { getServerAccessToken } from "@/lib/auth-token-server";
 import type { Borrow } from "@/lib/types";
 
 export const metadata: Metadata = {
@@ -69,7 +70,7 @@ async function MyBorrowsResults() {
 
   let borrows: Borrow[];
   try {
-    const result: unknown = await getBorrows(session.user.email, AbortSignal.timeout(15_000));
+    const result: unknown = await getBorrows(session.user.email, AbortSignal.timeout(15_000), await getServerAccessToken(session.user.email));
     if (!Array.isArray(result)) throw new Error("Unexpected borrow list response");
     const email = session.user.email.trim().toLowerCase();
     borrows = result.filter(isBorrow).filter((borrow) => borrow.userEmail.trim().toLowerCase() === email);

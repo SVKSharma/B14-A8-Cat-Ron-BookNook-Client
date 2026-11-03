@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 
 import { useToastManager } from "@/components/ui/toast";
 import { signOut } from "@/lib/auth-client";
+import { clearBrowserAccessToken } from "@/lib/auth-token-client";
 
 export function useSignOut() {
   const router = useRouter();
@@ -16,6 +17,9 @@ export function useSignOut() {
         toastManager.add({ type: "error", title: "Couldn’t sign out", description: result.error.message });
         return;
       }
+
+      clearBrowserAccessToken();
+      await fetch("/api/auth/token-cookie", { method: "DELETE", credentials: "same-origin" }).catch(() => undefined);
 
       toastManager.add({ type: "success", title: "Signed out", description: "You’ve been safely signed out of BookNook." });
       router.replace("/");

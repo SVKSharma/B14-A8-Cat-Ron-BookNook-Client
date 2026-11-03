@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { useToastManager } from "@/components/ui/toast";
 import { useSession } from "@/lib/auth-client";
 import { createBorrow, getBorrows } from "@/lib/api";
+import { getBrowserAccessToken } from "@/lib/auth-token-client";
 import type { Book } from "@/lib/types";
 
 export function BorrowBookButton({ book }: { book: Book }) {
@@ -21,15 +22,12 @@ export function BorrowBookButton({ book }: { book: Book }) {
 
   async function borrow() {
     if (lock.current || isPending || !session?.user.email) return;
-    if (book.addedByEmail.trim().toLowerCase() === session.user.email.trim().toLowerCase()) {
-      toastManager.add({ type: "error", title: "This is your book", description: "You can’t borrow a book from your own shelf." });
-      return;
-    }
 
     lock.current = true;
     setIsBorrowing(true);
     try {
-      const currentBorrows = await getBorrows(session.user.email, AbortSignal.timeout(15_000));
+      const accessToken = await getBrowserAccessToken();
+      const currentBorrows = await getBorrows(session.user.email, AbortSignal.timeout(15_000), accessToken);
       if (currentBorrows.some((record) => record.bookId === book._id)) {
         setBorrowed(true);
         toastManager.add({ type: "error", title: "Already on your borrow list", description: "Return this copy before borrowing it again." });
@@ -38,10 +36,7 @@ export function BorrowBookButton({ book }: { book: Book }) {
 
       await createBorrow({
         bookId: book._id,
-        userEmail: session.user.email,
-        bookTitle: book.title,
-        bookImage: book.image,
-      });
+      }, accessToken);
       setBorrowed(true);
       toastManager.add({ type: "success", title: "Book borrowed", description: `“${book.title}” is now in My Borrows. You have 7 days to read it.` });
       router.refresh();
@@ -75,11 +70,10 @@ export function BorrowBookButton({ book }: { book: Book }) {
     );
   }
 
-  const isOwnBook = session?.user.email?.trim().toLowerCase() === book.addedByEmail.trim().toLowerCase();
   return (
-    <Button size="lg" className="h-12 w-full rounded-full" onClick={() => void borrow()} disabled={isPending || isBorrowing || isOwnBook}>
+    <Button size="lg" className="h-12 w-full rounded-full" onClick={() => void borrow()} disabled={isPending || isBorrowing}>
       {isBorrowing ? <LoaderCircle className="animate-spin" aria-hidden="true" /> : <BookOpen aria-hidden="true" />}
-      {isBorrowing ? "Checking availability…" : isOwnBook ? "Your listing" : "Borrow this book"}
+      {isBorrowing ? "Checking availability…" : "Borrow this book"}
     </Button>
   );
 }

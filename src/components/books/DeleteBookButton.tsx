@@ -18,6 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useToastManager } from "@/components/ui/toast";
 import { deleteBook } from "@/lib/api";
+import { getBrowserAccessToken } from "@/lib/auth-token-client";
 import type { Book } from "@/lib/types";
 
 export function DeleteBookButton({ book, showLabel = false }: { book: Pick<Book, "_id" | "title">; showLabel?: boolean }) {
@@ -31,7 +32,7 @@ export function DeleteBookButton({ book, showLabel = false }: { book: Pick<Book,
     if (isDeleting) return;
     setIsDeleting(true);
     try {
-      await deleteBook(book._id);
+      await deleteBook(book._id, await getBrowserAccessToken());
       setOpen(false);
       setDeleted(true);
       toastManager.add({
