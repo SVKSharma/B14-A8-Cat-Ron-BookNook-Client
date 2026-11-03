@@ -2,13 +2,14 @@ import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
+import { getServerSession } from "@/lib/auth-token-server";
 
 const ACCESS_TOKEN_COOKIE = "booknook_api_token";
 const TOKEN_MAX_AGE = 7 * 24 * 60 * 60;
 
 export async function POST(request: Request) {
   const requestHeaders = await headers();
-  const session = await auth.api.getSession({ headers: requestHeaders });
+  const session = await getServerSession(requestHeaders);
   if (!session) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }

@@ -2,15 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { ArrowRight, BookPlus, LibraryBig } from "lucide-react";
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { BookCard } from "@/components/books/BookCard";
 import { Button } from "@/components/ui/button";
 import { getBooks } from "@/lib/api";
 import { isBook } from "@/lib/book-utils";
-import { auth } from "@/lib/auth";
-import { getServerAccessToken } from "@/lib/auth-token-server";
+import { getServerAccessToken, getServerSession } from "@/lib/auth-token-server";
 import type { Book } from "@/lib/types";
 
 export const metadata: Metadata = {
@@ -66,7 +64,7 @@ function MyBooksEmpty() {
 }
 
 async function MyBooksResults() {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getServerSession();
   if (!session) redirect("/signin?callbackUrl=%2Fmy-books");
 
   let books: Book[];

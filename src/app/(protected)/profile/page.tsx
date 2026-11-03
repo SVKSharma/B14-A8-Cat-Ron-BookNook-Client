@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { ArrowRight, BookOpen, Mail, UserRound } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { auth } from "@/lib/auth";
+import { getServerSession } from "@/lib/auth-token-server";
 
 export const metadata: Metadata = {
   title: "Profile",
@@ -23,7 +22,7 @@ function getInitials(name: string) {
 }
 
 export default async function ProfilePage() {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getServerSession();
   if (!session) redirect("/signin?callbackUrl=%2Fprofile");
 
   const user = session.user;
