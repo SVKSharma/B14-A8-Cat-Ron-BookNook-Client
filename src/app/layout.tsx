@@ -63,10 +63,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} h-full antialiased`}
     >
-      <body className="min-h-svh bg-background font-sans text-foreground">
+      <body className="min-h-svh font-sans text-foreground">
         <ThemeProvider>
           <Toaster>
-            <div className="flex min-h-svh flex-col">
+            <div className="site-shell flex min-h-svh flex-col">
               <Navbar />
               <main className="flex-1">{children}</main>
               <Footer />

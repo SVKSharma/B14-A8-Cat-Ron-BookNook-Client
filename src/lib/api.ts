@@ -59,6 +59,7 @@ export async function apiFetch<T>(
 export type BookListParams = {
   limit?: number;
   email?: string;
+  signal?: AbortSignal;
 };
 
 export async function getBooks(params: BookListParams = {}): Promise<Book[]> {
@@ -74,7 +75,9 @@ export async function getBooks(params: BookListParams = {}): Promise<Book[]> {
 
   const query = searchParams.toString();
 
-  return apiFetch<Book[]>(`/books${query ? `?${query}` : ""}`);
+  return apiFetch<Book[]>(`/books${query ? `?${query}` : ""}`, {
+    signal: params.signal,
+  });
 }
 
 export async function getBook(id: string): Promise<Book> {
@@ -89,11 +92,12 @@ export async function createBook(
   return apiFetch("/books", {
     method: "POST",
     body: JSON.stringify(payload),
+    signal: AbortSignal.timeout(30_000),
   });
 }
 
 export type UpdateBookPayload = Partial<
-  Pick<Book, "title" | "author" | "category" | "image" | "description">
+  Pick<Book, "title" | "author" | "category" | "isbn" | "image" | "description">
 >;
 
 export async function updateBook(
@@ -109,7 +113,10 @@ export async function updateBook(
 export async function deleteBook(
   id: string
 ): Promise<{ acknowledged: boolean; deletedCount: number }> {
-  return apiFetch(`/books/${encodeURIComponent(id)}`, { method: "DELETE" });
+  return apiFetch(`/books/${encodeURIComponent(id)}`, {
+    method: "DELETE",
+    signal: AbortSignal.timeout(30_000),
+  });
 }
 
 export type CreateBorrowPayload = {
@@ -120,9 +127,9 @@ export type CreateBorrowPayload = {
   returnDate?: string;
 };
 
-export async function getBorrows(email?: string): Promise<Borrow[]> {
+export async function getBorrows(email?: string, signal?: AbortSignal): Promise<Borrow[]> {
   const query = email ? `?email=${encodeURIComponent(email)}` : "";
-  return apiFetch<Borrow[]>(`/borrows${query}`);
+  return apiFetch<Borrow[]>(`/borrows${query}`, { signal });
 }
 
 export async function createBorrow(
@@ -131,11 +138,15 @@ export async function createBorrow(
   return apiFetch("/borrows", {
     method: "POST",
     body: JSON.stringify(payload),
+    signal: AbortSignal.timeout(30_000),
   });
 }
 
 export async function deleteBorrow(
   id: string
 ): Promise<{ acknowledged: boolean; deletedCount: number }> {
-  return apiFetch(`/borrows/${encodeURIComponent(id)}`, { method: "DELETE" });
+  return apiFetch(`/borrows/${encodeURIComponent(id)}`, {
+    method: "DELETE",
+    signal: AbortSignal.timeout(30_000),
+  });
 }

@@ -7,6 +7,7 @@ import { ArrowLeft, BookOpen, UserRound } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { BorrowBookButton } from "@/components/books/BorrowBookButton";
 import { ApiError, getBook } from "@/lib/api";
 import { isBook } from "@/lib/book-utils";
 import type { Book } from "@/lib/types";
@@ -114,11 +115,9 @@ function BookDetails({ book }: { book: Book }) {
           </div>
 
           <div className="mt-6 max-w-md">
-            <Button size="lg" className="h-12 w-full rounded-full" disabled>
-              <BookOpen aria-hidden="true" /> Borrowing opens soon
-            </Button>
+            <BorrowBookButton book={book} />
             <p className="mt-2 text-center text-xs leading-5 text-muted-foreground">
-              Borrowing will be available after account setup is complete.
+              Borrowed books are due back in 7 days. Find yours in My Borrows.
             </p>
           </div>
         </article>

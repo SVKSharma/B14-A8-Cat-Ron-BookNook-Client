@@ -2,6 +2,7 @@ import type { BookCategory } from "./constants";
 
 export type Book = {
   _id: string;
+  isbn?: string;
   title: string;
   author: string;
   category: BookCategory;

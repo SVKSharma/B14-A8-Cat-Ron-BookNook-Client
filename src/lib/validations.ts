@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { BOOK_CATEGORIES } from "./constants";
+import { isValidIsbn, normalizeIsbn } from "./isbn";
 
 export const passwordSchema = z
   .string()
@@ -40,6 +41,11 @@ export const registerSchema = z
   });
 
 export const bookSchema = z.object({
+  isbn: z
+    .string()
+    .trim()
+    .transform(normalizeIsbn)
+    .refine(isValidIsbn, "ISBN must contain exactly 13 digits"),
   title: z
     .string()
     .trim()
