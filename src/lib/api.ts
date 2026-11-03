@@ -59,6 +59,7 @@ export async function apiFetch<T>(
 export type BookListParams = {
   limit?: number;
   email?: string;
+  signal?: AbortSignal;
 };
 
 export async function getBooks(params: BookListParams = {}): Promise<Book[]> {
@@ -74,7 +75,9 @@ export async function getBooks(params: BookListParams = {}): Promise<Book[]> {
 
   const query = searchParams.toString();
 
-  return apiFetch<Book[]>(`/books${query ? `?${query}` : ""}`);
+  return apiFetch<Book[]>(`/books${query ? `?${query}` : ""}`, {
+    signal: params.signal,
+  });
 }
 
 export async function getBook(id: string): Promise<Book> {
@@ -89,6 +92,7 @@ export async function createBook(
   return apiFetch("/books", {
     method: "POST",
     body: JSON.stringify(payload),
+    signal: AbortSignal.timeout(30_000),
   });
 }
 
