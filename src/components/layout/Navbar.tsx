@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -13,7 +14,7 @@ import { MobileNav } from "./MobileNav";
 import { SiteLogo } from "./SiteLogo";
 import { ThemeToggle } from "./ThemeToggle";
 
-export function Navbar() {
+function NavbarContent() {
   const pathname = usePathname();
   const { data: session, isPending } = useSession();
   const user = session?.user ?? null;
@@ -88,5 +89,24 @@ export function Navbar() {
         </div>
       </div>
     </header>
+  );
+}
+
+function NavbarFallback() {
+  return (
+    <header className="sticky top-0 z-40 border-b border-border/80 bg-background/95 shadow-[0_4px_24px_-20px_rgba(30,45,35,0.35)] backdrop-blur-xl">
+      <div className="keep-content-center flex h-18 items-center justify-between gap-4">
+        <SiteLogo />
+        <div className="h-10 w-28 animate-pulse rounded-full bg-muted lg:w-56" aria-hidden="true" />
+      </div>
+    </header>
+  );
+}
+
+export function Navbar() {
+  return (
+    <Suspense fallback={<NavbarFallback />}>
+      <NavbarContent />
+    </Suspense>
   );
 }
