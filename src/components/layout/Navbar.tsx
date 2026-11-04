@@ -21,12 +21,12 @@ function NavbarContent() {
   const links = user ? [...NAV_LINKS, ...PRIVATE_NAV_LINKS] : NAV_LINKS;
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border/80 bg-background/95 shadow-[0_4px_24px_-20px_rgba(30,45,35,0.35)] backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b border-border/60 bg-background/70 shadow-[0_8px_32px_-18px_rgba(20,35,27,0.24)] backdrop-blur-2xl supports-[backdrop-filter]:bg-background/60">
       <div className="keep-content-center flex h-18 items-center justify-between gap-4">
         <SiteLogo />
 
         <nav
-          className="hidden items-center gap-1 rounded-full border border-border/70 bg-card/75 p-1 shadow-sm lg:flex"
+          className="hidden items-center gap-1 rounded-full border border-border/60 bg-card/55 p-1 shadow-sm backdrop-blur-xl lg:flex"
           aria-label="Main navigation"
         >
           {links.map((link) => {
@@ -41,10 +41,10 @@ function NavbarContent() {
                 href={link.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "rounded-full px-4 py-2 text-sm font-medium transition-colors",
+                  "rounded-full px-4 py-2 text-sm font-medium transition-all duration-200",
                   active
-                    ? "bg-primary text-primary-foreground shadow-sm"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                    ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
+                    : "text-muted-foreground hover:bg-background/70 hover:text-foreground"
                 )}
               >
                 {link.label}
@@ -94,7 +94,7 @@ function NavbarContent() {
 
 function NavbarFallback() {
   return (
-    <header className="sticky top-0 z-40 border-b border-border/80 bg-background/95 shadow-[0_4px_24px_-20px_rgba(30,45,35,0.35)] backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b border-border/60 bg-background/70 shadow-[0_8px_32px_-18px_rgba(20,35,27,0.24)] backdrop-blur-2xl supports-[backdrop-filter]:bg-background/60">
       <div className="keep-content-center flex h-18 items-center justify-between gap-4">
         <SiteLogo />
         <div className="h-10 w-28 animate-pulse rounded-full bg-muted lg:w-56" aria-hidden="true" />
