@@ -8,6 +8,7 @@ import { ArrowLeft, BookOpen, UserRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { BorrowBookButton } from "@/components/books/BorrowBookButton";
+import { BookDetailsSkeleton } from "@/components/books/BookDetailsSkeleton";
 import { ApiError, getBook } from "@/lib/api";
 import { isBook } from "@/lib/book-utils";
 import type { Book } from "@/lib/types";
@@ -34,24 +35,6 @@ export async function generateMetadata({ params }: BookDetailsPageProps): Promis
   } catch {
     return { title: "Book Details" };
   }
-}
-
-function BookDetailsSkeleton() {
-  return (
-    <section className="keep-content-center py-10 sm:py-14" aria-label="Loading book details" aria-busy="true">
-      <div className="mb-8 h-5 w-28 animate-pulse rounded bg-muted" />
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-12">
-        <div className="mx-auto aspect-[4/5] w-full max-w-md animate-pulse rounded-3xl bg-muted" />
-        <div className="space-y-5 py-2">
-          <div className="h-7 w-28 animate-pulse rounded-full bg-muted" />
-          <div className="h-12 w-4/5 animate-pulse rounded bg-muted" />
-          <div className="h-5 w-2/5 animate-pulse rounded bg-muted" />
-          <div className="h-32 w-full animate-pulse rounded-2xl bg-muted" />
-          <div className="h-14 w-full max-w-sm animate-pulse rounded-2xl bg-muted" />
-        </div>
-      </div>
-    </section>
-  );
 }
 
 function BookDetailsError() {
