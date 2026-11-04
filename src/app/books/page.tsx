@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { ArrowRight, BookOpen, Library } from "lucide-react";
 
 import { BooksCatalog } from "@/components/books/BooksCatalog";
+import { BooksLoadingSkeleton } from "@/components/books/BooksLoadingSkeleton";
 import { Button } from "@/components/ui/button";
 import { getBooks } from "@/lib/api";
 import { isBook } from "@/lib/book-utils";
@@ -13,24 +14,6 @@ export const metadata: Metadata = {
   title: "All Books",
   description: "Explore books shared by the BookNook community. Search by title or author and browse by category.",
 };
-
-function BooksGridSkeleton() {
-  return (
-    <div className="grid min-w-0 grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6" aria-label="Loading books" aria-busy="true">
-      {Array.from({ length: 6 }, (_, index) => (
-        <div key={index} className="overflow-hidden rounded-2xl border border-border/75 bg-card/80 shadow-sm">
-          <div className="aspect-[4/3] animate-pulse bg-muted" />
-          <div className="space-y-3 p-4 sm:p-5">
-            <div className="h-5 w-3/4 animate-pulse rounded bg-muted" />
-            <div className="h-4 w-1/2 animate-pulse rounded bg-muted" />
-            <div className="h-10 w-full animate-pulse rounded bg-muted" />
-            <div className="h-10 w-full animate-pulse rounded-full bg-muted" />
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
 
 function EmptyLibrary() {
   return (
@@ -93,7 +76,7 @@ export default function BooksPage() {
           </p>
         </header>
 
-        <Suspense fallback={<BooksGridSkeleton />}>
+        <Suspense fallback={<BooksLoadingSkeleton />}>
           <BooksResults />
         </Suspense>
       </div>

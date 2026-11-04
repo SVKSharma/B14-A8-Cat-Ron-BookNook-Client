@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { ArrowRight, BookOpen, CalendarDays, LibraryBig } from "lucide-react";
 
 import { ReturnBorrowButton } from "@/components/books/ReturnBorrowButton";
+import { MyBorrowsSkeleton } from "@/components/books/MyBorrowsSkeleton";
 import { Button } from "@/components/ui/button";
 import { getBorrows } from "@/lib/api";
 import { getServerAccessToken, getServerSession } from "@/lib/auth-token-server";
@@ -30,14 +31,6 @@ function isBorrow(value: unknown): value is Borrow {
 
 function dateLabel(value: string) {
   return new Intl.DateTimeFormat("en", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }).format(new Date(value));
-}
-
-function MyBorrowsSkeleton() {
-  return (
-    <div className="space-y-4" aria-label="Loading your borrows" aria-busy="true">
-      {Array.from({ length: 2 }, (_, index) => <div key={index} className="h-44 animate-pulse rounded-3xl bg-card/70" />)}
-    </div>
-  );
 }
 
 function MyBorrowsError() {
