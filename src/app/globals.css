@@ -187,6 +187,7 @@
   html {
     @apply scroll-smooth font-sans;
     min-height: 100%;
+    overflow-x: clip;
     background-color: var(--background);
     background-image:
       radial-gradient(ellipse 62rem 42rem at 0% 0%, var(--page-glow-primary), transparent 72%),
@@ -281,5 +282,9 @@ button:disabled,
       radial-gradient(ellipse at 14% 18%, color-mix(in srgb, var(--accent) 44%, transparent), transparent 38%),
       radial-gradient(ellipse at 86% 30%, color-mix(in srgb, var(--primary) 8%, transparent), transparent 42%),
       linear-gradient(180deg, color-mix(in srgb, var(--primary) 4%, var(--background)), var(--background) 78%);
+  }
+
+  .review-marquee-viewport:focus-within .rfm-marquee {
+    animation-play-state: paused !important;
   }
 }

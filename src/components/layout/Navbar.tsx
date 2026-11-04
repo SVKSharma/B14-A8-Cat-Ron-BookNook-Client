@@ -21,12 +21,12 @@ function NavbarContent() {
   const links = user ? [...NAV_LINKS, ...PRIVATE_NAV_LINKS] : NAV_LINKS;
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border/60 bg-background/70 shadow-[0_8px_32px_-18px_rgba(20,35,27,0.24)] backdrop-blur-2xl supports-[backdrop-filter]:bg-background/60">
-      <div className="keep-content-center flex h-18 items-center justify-between gap-4">
+    <header className="sticky top-0 z-40 isolate border-b border-border/50 bg-background/85 shadow-[0_8px_32px_-18px_rgba(20,35,27,0.3)] backdrop-blur-2xl supports-[backdrop-filter]:bg-background/45 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-primary/40 after:to-transparent after:content-['']">
+      <div className="keep-content-center relative z-10 flex h-18 items-center justify-between gap-4">
         <SiteLogo />
 
         <nav
-          className="hidden items-center gap-1 rounded-full border border-border/60 bg-card/55 p-1 shadow-sm backdrop-blur-xl lg:flex"
+          className="hidden items-center gap-1 rounded-full border border-border/55 bg-card/40 p-1 shadow-[0_4px_20px_-10px_rgba(20,35,27,0.3)] backdrop-blur-2xl lg:flex"
           aria-label="Main navigation"
         >
           {links.map((link) => {
@@ -43,7 +43,7 @@ function NavbarContent() {
                 className={cn(
                   "rounded-full px-4 py-2 text-sm font-medium transition-all duration-200",
                   active
-                    ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
+                    ? "bg-primary text-primary-foreground shadow-md shadow-primary/25 ring-1 ring-primary-foreground/10"
                     : "text-muted-foreground hover:bg-background/70 hover:text-foreground"
                 )}
               >
@@ -94,8 +94,8 @@ function NavbarContent() {
 
 function NavbarFallback() {
   return (
-    <header className="sticky top-0 z-40 border-b border-border/60 bg-background/70 shadow-[0_8px_32px_-18px_rgba(20,35,27,0.24)] backdrop-blur-2xl supports-[backdrop-filter]:bg-background/60">
-      <div className="keep-content-center flex h-18 items-center justify-between gap-4">
+    <header className="sticky top-0 z-40 isolate border-b border-border/50 bg-background/85 shadow-[0_8px_32px_-18px_rgba(20,35,27,0.3)] backdrop-blur-2xl supports-[backdrop-filter]:bg-background/45 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-primary/40 after:to-transparent after:content-['']">
+      <div className="keep-content-center relative z-10 flex h-18 items-center justify-between gap-4">
         <SiteLogo />
         <div className="h-10 w-28 animate-pulse rounded-full bg-muted lg:w-56" aria-hidden="true" />
       </div>

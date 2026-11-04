@@ -70,9 +70,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} h-full overflow-x-clip antialiased`}
     >
-      <body className="min-h-svh font-sans text-foreground">
+      <body className="min-h-svh overflow-x-clip font-sans text-foreground">
         <ThemeProvider>
           <AccessTokenCookieSync />
           <Toaster>
