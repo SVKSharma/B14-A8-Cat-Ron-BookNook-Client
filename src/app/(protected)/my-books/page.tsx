@@ -5,6 +5,7 @@ import { ArrowRight, BookPlus, LibraryBig } from "lucide-react";
 import { redirect } from "next/navigation";
 
 import { BookCard } from "@/components/books/BookCard";
+import { MyBooksSkeleton } from "@/components/books/MyBooksSkeleton";
 import { Button } from "@/components/ui/button";
 import { getBooks } from "@/lib/api";
 import { isBook } from "@/lib/book-utils";
@@ -15,23 +16,6 @@ export const metadata: Metadata = {
   title: "My Books",
   description: "Review and edit the books you have shared with the BookNook community.",
 };
-
-function MyBooksSkeleton() {
-  return (
-    <div className="grid min-w-0 grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6" aria-label="Loading your books" aria-busy="true">
-      {Array.from({ length: 3 }, (_, index) => (
-        <div key={index} className="overflow-hidden rounded-2xl border border-border/75 bg-card/80 shadow-sm">
-          <div className="aspect-[4/3] animate-pulse bg-muted" />
-          <div className="space-y-3 p-4 sm:p-5">
-            <div className="h-5 w-3/4 animate-pulse rounded bg-muted" />
-            <div className="h-4 w-1/2 animate-pulse rounded bg-muted" />
-            <div className="h-10 w-full animate-pulse rounded bg-muted" />
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
 
 function MyBooksError() {
   return (

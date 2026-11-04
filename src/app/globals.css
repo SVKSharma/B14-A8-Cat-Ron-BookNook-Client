@@ -19,8 +19,32 @@
   animation: skeleton-breathe 2.6s ease-in-out infinite;
 }
 
+.borrow-skeleton {
+  background:
+    linear-gradient(110deg, transparent 20%, color-mix(in srgb, var(--primary) 18%, transparent) 48%, transparent 76%),
+    color-mix(in srgb, var(--muted) 78%, var(--primary) 22%);
+  background-size: 220% 100%, 100% 100%;
+  animation: borrow-skeleton-breathe 2.4s ease-in-out infinite;
+}
+
+@keyframes borrow-skeleton-breathe {
+  0%,
+  100% {
+    background-position: 100% 0, 0 0;
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--primary) 5%, transparent), 0 0 8px color-mix(in srgb, var(--primary) 8%, transparent);
+    opacity: 0.72;
+  }
+
+  50% {
+    background-position: -100% 0, 0 0;
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--primary) 16%, transparent), 0 0 22px color-mix(in srgb, var(--primary) 22%, transparent);
+    opacity: 1;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .animate-pulse {
+  .animate-pulse,
+  .borrow-skeleton {
     animation: none;
   }
 }
