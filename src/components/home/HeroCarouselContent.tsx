@@ -57,7 +57,7 @@ export default function HeroCarouselContent() {
           ref={swiperRef}
           modules={[A11y, Autoplay, Pagination]}
           loop
-          autoplay={{ delay: 6500, disableOnInteraction: false, pauseOnMouseEnter: true }}
+          autoplay={{ delay: 4000, disableOnInteraction: false, pauseOnMouseEnter: false }}
           pagination={{ clickable: true, el: ".hero-pagination" }}
           a11y={{ enabled: true }}
           className="hero-swiper"
