@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { ArrowRight, ArrowUpRight, Mail } from "lucide-react";
@@ -5,6 +7,7 @@ import { FaFacebookF, FaGithub, FaInstagram, FaXTwitter } from "react-icons/fa6"
 
 import { SiteLogo } from "@/components/layout/SiteLogo";
 import { Button } from "@/components/ui/button";
+import { useSession } from "@/lib/auth-client";
 import { SITE_CONFIG } from "@/lib/constants";
 
 function SocialLink({
@@ -30,6 +33,11 @@ function SocialLink({
 }
 
 export function Footer() {
+  const { data: session } = useSession();
+  const exploreHref = session?.user
+    ? "/books"
+    : `/signin?callbackUrl=${encodeURIComponent("/books")}`;
+
   return (
     <footer className="mt-auto border-t border-border/80 bg-card/75" aria-label="Site footer">
       <div className="keep-content-center">
@@ -45,7 +53,7 @@ export function Footer() {
             variant="secondary"
             className="mt-5 h-11 shrink-0 rounded-full px-5 shadow-sm sm:mt-0"
             nativeButton={false}
-            render={<Link href="/books" />}
+            render={<Link href={exploreHref} />}
           >
             Explore books <ArrowRight aria-hidden="true" />
           </Button>
